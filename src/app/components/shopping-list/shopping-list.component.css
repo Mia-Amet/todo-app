@@ -1,0 +1,22 @@
+button[type="submit"] {
+  margin-top: 24px;
+}
+
+.btn-sm {
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-left: .5em;
+  margin-right: .5em;
+}
+
+.btn-link {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.completed-list-item {
+  text-decoration: line-through;
+  color: #c6cdd4 !important;
+}

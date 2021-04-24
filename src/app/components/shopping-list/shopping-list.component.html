@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+      <div class="card mb-3">
+        <div class="card-body">
+          <form novalidate class="row" (ngSubmit)="onSubmit(form)" #form="ngForm">
+            <div class="col-auto w-50 form-group">
+              <label for="name" class="">{{ editedItemIndex === -1 ? 'New' : 'Edit' }} item</label>
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                [(ngModel)]="item.item"
+                [ngClass]="{ 'is-invalid': itemName.errors && form.submitted }"
+                name="item"
+                #itemName="ngModel"
+                required
+                minlength="2"
+              />
+              <div class="invalid-feedback">{{ invalidFeedback }}</div>
+            </div>
+            <div class="col-auto w-25 form-group">
+              <label for="amount" class="">Amount</label>
+              <input
+                type="text"
+                id="amount"
+                class="form-control"
+                [(ngModel)]="item.amount"
+                [ngClass]="{ 'is-invalid': itemAmount.errors && form.submitted }"
+                name="amount"
+                #itemAmount="ngModel"
+                pattern="^[1-9][A-Za-z0-9 ]*$"
+                placeholder="e.g 1kg (optional)"
+              />
+              <div class="invalid-feedback">Invalid amount</div>
+            </div>
+            <div class="col-auto w-25 form-group">
+              <button class="btn btn-info w-100" type="submit">{{ editedItemIndex === -1 ? 'Add' : 'Save' }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <ul class="list-group" *ngIf="shoppingList.length; else noItems">
+        <li class="list-group-item" *ngFor="let listItem of shoppingList; index as i">
+          <div class="row d-flex align-items-center">
+            <div class="col-8">
+              <input
+                type="checkbox"
+                class="m-3"
+                name="isCompleted"
+                [(ngModel)]="listItem.isCompleted"
+                #checkInput="ngModel"
+                (change)="onComplete(i, checkInput)"
+              />
+              <span>{{ (listItem.amount || '') + ' ' + listItem.item }}</span>
+            </div>
+            <div class="col col-sm-4 d-flex justify-content-end">
+              <button class="btn btn-info btn-sm" (click)="editItem(i)">Edit</button>
+              <button class="btn btn-dark btn-sm" (click)="deleteItem(i)">Delete</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <button
+        class="btn btn-link mt-3 text-dark"
+        [disabled]="!completedList.length"
+        (click)="showCompleted = !showCompleted"
+      >
+        {{ completedList.length ? showCompleted ? 'Hide' : 'Show' : 'No' }} completed items
+      </button>
+      <ul class="list-group mt-3" *ngIf="showCompleted">
+        <li class="list-group-item" *ngFor="let listItem of completedList; index as i">
+          <div class="row d-flex align-items-center">
+            <div class="col-md">
+              <input
+                type="checkbox"
+                class="m-3"
+                name="isCompleted"
+                [(ngModel)]="listItem.isCompleted"
+                #checkInput="ngModel"
+                (change)="onComplete(i, checkInput)"
+              />
+              <span class="completed-list-item">{{ listItem.amount + ' ' + listItem.item }}</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<ng-template #noItems>
+  <div class="alert alert-secondary">List is empty</div>
+</ng-template>
